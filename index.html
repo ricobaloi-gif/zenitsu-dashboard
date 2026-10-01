@@ -1,0 +1,2937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Zenitsu Trading Control</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --yellow: #ffd21c;
+            --yellow-bright: #ffe86a;
+            --yellow-dark: #b88a00;
+
+            --black: #050505;
+            --dark: #090909;
+            --card: rgba(14, 14, 14, 0.88);
+
+            --green: #35e58a;
+            --red: #ff4545;
+            --text: #ffffff;
+            --muted: #929292;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+
+            background:
+                radial-gradient(
+                    circle at 50% 20%,
+                    rgba(255, 210, 28, 0.12),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    145deg,
+                    #020202,
+                    #0b0b0b 50%,
+                    #030303
+                );
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 18px;
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+
+        /* =====================================================
+           PARTICLES
+        ===================================================== */
+
+        .particles {
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            overflow: hidden;
+
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+
+            width: 3px;
+            height: 3px;
+
+            background: var(--yellow);
+
+            border-radius: 50%;
+
+            opacity: 0;
+
+            box-shadow:
+                0 0 8px var(--yellow),
+                0 0 16px rgba(255, 210, 28, 0.7);
+
+            animation:
+                particleFly linear infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 5%;
+            animation-duration: 7s;
+            animation-delay: -2s;
+        }
+
+        .particle:nth-child(2) {
+            left: 13%;
+            animation-duration: 10s;
+            animation-delay: -7s;
+        }
+
+        .particle:nth-child(3) {
+            left: 22%;
+            animation-duration: 8s;
+            animation-delay: -4s;
+        }
+
+        .particle:nth-child(4) {
+            left: 31%;
+            animation-duration: 12s;
+            animation-delay: -9s;
+        }
+
+        .particle:nth-child(5) {
+            left: 40%;
+            animation-duration: 9s;
+            animation-delay: -3s;
+        }
+
+        .particle:nth-child(6) {
+            left: 49%;
+            animation-duration: 11s;
+            animation-delay: -8s;
+        }
+
+        .particle:nth-child(7) {
+            left: 58%;
+            animation-duration: 7s;
+            animation-delay: -5s;
+        }
+
+        .particle:nth-child(8) {
+            left: 67%;
+            animation-duration: 10s;
+            animation-delay: -1s;
+        }
+
+        .particle:nth-child(9) {
+            left: 76%;
+            animation-duration: 8s;
+            animation-delay: -6s;
+        }
+
+        .particle:nth-child(10) {
+            left: 85%;
+            animation-duration: 12s;
+            animation-delay: -10s;
+        }
+
+        .particle:nth-child(11) {
+            left: 93%;
+            animation-duration: 9s;
+            animation-delay: -4s;
+        }
+
+        @keyframes particleFly {
+
+            0% {
+                transform:
+                    translateY(110vh)
+                    translateX(0)
+                    rotate(0deg);
+
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            50% {
+                transform:
+                    translateY(50vh)
+                    translateX(35px)
+                    rotate(180deg);
+
+                opacity: 0.45;
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform:
+                    translateY(-10vh)
+                    translateX(-25px)
+                    rotate(360deg);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* =====================================================
+           EXTRA LIGHTNING PARTICLES
+        ===================================================== */
+
+        .spark {
+            position: absolute;
+
+            width: 18px;
+            height: 2px;
+
+            background: var(--yellow);
+
+            box-shadow:
+                0 0 8px var(--yellow),
+                0 0 18px var(--yellow);
+
+            transform: rotate(-35deg);
+
+            opacity: 0;
+
+            animation: sparkFly 5s linear infinite;
+        }
+
+        .spark:nth-child(12) {
+            left: 20%;
+            top: 20%;
+            animation-delay: -2s;
+        }
+
+        .spark:nth-child(13) {
+            left: 75%;
+            top: 30%;
+            animation-delay: -4s;
+        }
+
+        .spark:nth-child(14) {
+            left: 60%;
+            top: 75%;
+            animation-delay: -1s;
+        }
+
+        @keyframes sparkFly {
+
+            0% {
+                opacity: 0;
+                transform:
+                    translate(0, 0)
+                    rotate(-35deg)
+                    scale(0.4);
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+
+                transform:
+                    translate(80px, -50px)
+                    rotate(-35deg)
+                    scale(1);
+            }
+
+            100% {
+                opacity: 0;
+
+                transform:
+                    translate(160px, -100px)
+                    rotate(-35deg)
+                    scale(0.2);
+            }
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(22, 22, 22, 0.96),
+                    rgba(7, 7, 7, 0.96)
+                );
+
+            border: 1px solid rgba(255, 210, 28, 0.22);
+
+            border-radius: 28px;
+
+            padding: 0 24px 24px;
+
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, 0.8),
+                0 0 50px rgba(255, 210, 28, 0.06);
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        /* =====================================================
+           TOP YELLOW LINE
+        ===================================================== */
+
+        .top-line {
+
+            height: 4px;
+
+            margin:
+                0 -24px 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--yellow),
+                    var(--yellow-bright),
+                    var(--yellow),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 15px rgba(255, 210, 28, 0.7);
+        }
+
+
+        /* =====================================================
+           HERO IMAGE
+        ===================================================== */
+
+        .hero {
+
+            position: relative;
+
+            height: 215px;
+
+            margin:
+                0 -24px 20px;
+
+            overflow: hidden;
+
+            background: #050505;
+        }
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent 35%,
+                    rgba(5, 5, 5, 0.25) 55%,
+                    #080808 100%
+                );
+        }
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 50% 30%,
+                    rgba(255, 210, 28, 0.18),
+                    transparent 55%
+                );
+
+            z-index: 1;
+        }
+
+        .hero img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            object-position: center;
+
+            display: block;
+
+            filter:
+                saturate(1.1)
+                contrast(1.08);
+
+            transform: scale(1.02);
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .brand {
+
+            position: relative;
+
+            margin-top: -15px;
+
+            z-index: 10;
+
+            text-align: center;
+        }
+
+        .brand-name {
+
+            font-size: 34px;
+
+            font-weight: 900;
+
+            letter-spacing: 5px;
+
+            color: white;
+
+            text-shadow:
+                0 0 10px rgba(255, 210, 28, 0.25);
+        }
+
+        .brand-name span {
+
+            color: var(--yellow);
+
+            text-shadow:
+                0 0 12px rgba(255, 210, 28, 0.6),
+                0 0 30px rgba(255, 210, 28, 0.2);
+        }
+
+        .subtitle {
+
+            color: #858585;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-top: 6px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =====================================================
+           STATUS PANEL
+        ===================================================== */
+
+        .status {
+
+            border-radius: 18px;
+
+            padding: 17px;
+
+            margin-bottom: 18px;
+
+            background:
+                rgba(5, 5, 5, 0.75);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.07);
+
+            box-shadow:
+                inset 0 1px rgba(255, 255, 255, 0.03);
+        }
+
+        .status-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 14px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+
+            color: #858585;
+
+            font-size: 13px;
+
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+
+            font-weight: 800;
+
+            font-size: 12px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           STATUS DOT
+        ===================================================== */
+
+        .value::before {
+
+            content: "";
+
+            display: inline-block;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            margin-right: 7px;
+
+            vertical-align: 1px;
+
+            background: currentColor;
+
+            box-shadow:
+                0 0 8px currentColor;
+        }
+
+        .connected {
+            color: var(--green);
+        }
+
+        .disconnected {
+            color: var(--red);
+        }
+
+        .trading-on {
+            color: var(--yellow);
+        }
+
+        .trading-off {
+            color: #777;
+        }
+
+
+        /* =====================================================
+           TRADE DIRECTION
+        ===================================================== */
+
+        .direction-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 9px;
+        }
+
+        .direction-button {
+            width: 100%;
+            margin-top: 0;
+            padding: 13px 6px;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.055);
+            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+
+        .direction-button.active {
+            background: linear-gradient(
+                135deg,
+                #ffe45b,
+                #f6c800
+            );
+            color: #090909;
+            box-shadow:
+                0 6px 22px rgba(255, 210, 28, 0.18);
+        }
+
+
+        /* =====================================================
+           MAIN TRADING BUTTON
+        ===================================================== */
+
+        button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 17px;
+
+            padding: 19px;
+
+            font-size: 15px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+
+            cursor: pointer;
+
+            margin-top: 9px;
+
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+
+            transform: scale(0.97);
+        }
+
+
+        .on {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffe45b,
+                    #f6c800
+                );
+
+            color: #090909;
+
+            box-shadow:
+                0 8px 30px rgba(255, 210, 28, 0.2);
+        }
+
+        .on:hover {
+
+            box-shadow:
+                0 8px 40px rgba(255, 210, 28, 0.4);
+        }
+
+
+        .off {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff5656,
+                    #d92f2f
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 30px rgba(255, 60, 60, 0.16);
+        }
+
+
+        /* =====================================================
+           EMERGENCY
+        ===================================================== */
+
+        .emergency {
+
+            background:
+                rgba(255, 255, 255, 0.055);
+
+            color: #d7d7d7;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow: none;
+        }
+
+        .emergency:hover {
+
+            background:
+                rgba(255, 60, 60, 0.12);
+
+            border-color:
+                rgba(255, 60, 60, 0.3);
+
+            color: #ff6868;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #5f5f5f;
+
+            font-size: 10px;
+
+            letter-spacing: 0.8px;
+        }
+
+        .footer span {
+
+            color: #888;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                border-radius: 25px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .top-line {
+                margin-left: -20px;
+                margin-right: -20px;
+            }
+
+            .hero {
+                margin-left: -20px;
+                margin-right: -20px;
+
+                height: 205px;
+            }
+
+            .brand-name {
+                font-size: 31px;
+            }
+        }
+
+    
+        /* =====================================================
+           ZENITSU NAVIGATION
+        ===================================================== */
+
+        .nav {
+            display: flex;
+            gap: 8px;
+            margin: 0 0 18px 0;
+            padding: 6px;
+            border: 1px solid rgba(255, 210, 28, 0.18);
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 14px;
+        }
+
+        .nav-button {
+            flex: 1;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #777;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .nav-button:hover {
+            color: #fff;
+            border-color: rgba(255, 210, 28, 0.18);
+        }
+
+        .nav-button.active {
+            color: #050505;
+            background: var(--yellow);
+            box-shadow: 0 0 18px rgba(255, 210, 28, 0.18);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* =====================================================
+           STATS PAGE
+        ===================================================== */
+
+        .stats-page {
+            width: 100%;
+        }
+
+        .stats-heading {
+            margin: 2px 0 14px;
+        }
+
+        .stats-title {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .stats-subtitle {
+            margin-top: 5px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .date-filter {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .date-field {
+            min-width: 0;
+        }
+
+        .date-field label {
+            display: block;
+            color: #777;
+            font-size: 9px;
+            letter-spacing: 1px;
+            margin: 0 0 5px 2px;
+        }
+
+        .date-field input {
+            width: 100%;
+            border: 1px solid rgba(255, 210, 28, 0.18);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            padding: 10px;
+            outline: none;
+            font-size: 11px;
+        }
+
+        .date-field input:focus {
+            border-color: rgba(255, 210, 28, 0.65);
+        }
+
+        .stats-filter-button {
+            align-self: end;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 13px;
+            background: var(--yellow);
+            color: #050505;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+        }
+
+        .stats-filter-button:hover {
+            background: var(--yellow-bright);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            padding: 13px;
+            border-radius: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 210, 28, 0.055),
+                    rgba(255, 255, 255, 0.018)
+                );
+        }
+
+        .stat-label {
+            color: #777;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            margin-top: 6px;
+            color: #fff;
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stat-value.positive {
+            color: var(--green);
+        }
+
+        .stat-value.negative {
+            color: var(--red);
+        }
+
+        .equity-card {
+            margin-top: 8px;
+            padding: 14px;
+            border-radius: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.26);
+        }
+
+        .section-title {
+            color: #aaa;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .equity-chart {
+            width: 100%;
+            height: 145px;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .chart-empty {
+            height: 145px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            text-align: center;
+        }
+
+        .trade-history {
+            margin-top: 8px;
+            padding: 14px;
+            border-radius: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.26);
+        }
+
+        .trade-table-wrap {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        .trade-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 560px;
+            font-size: 9px;
+        }
+
+        .trade-table th {
+            color: #666;
+            text-align: left;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            padding: 8px 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .trade-table td {
+            color: #ccc;
+            padding: 9px 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .trade-table .win {
+            color: var(--green);
+            font-weight: 800;
+        }
+
+        .trade-table .loss {
+            color: var(--red);
+            font-weight: 800;
+        }
+
+        .stats-status {
+            margin-top: 9px;
+            color: #555;
+            font-size: 9px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 480px) {
+            .date-filter {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stats-filter-button {
+                grid-column: 1 / -1;
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+<div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+</div>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="top-line"></div>
+
+        <div class="hero">
+            <img src="Zenitsu.jpg" alt="Zenitsu">
+        </div>
+
+        <div class="brand">
+            <div class="brand-name">
+                ZEN<span>ITSU</span>
+            </div>
+
+            <div id="pageSubtitle" class="subtitle">
+                Trading Control
+            </div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav">
+            <button
+                id="controlNav"
+                class="nav-button active"
+                onclick="showPage('control')"
+            >
+                ⚡ CONTROL
+            </button>
+
+            <button
+                id="statsNav"
+                class="nav-button"
+                onclick="showPage('stats')"
+            >
+                ◈ STATS
+            </button>
+        </div>
+
+        <!-- =================================================
+             CONTROL PAGE
+        ================================================== -->
+
+        <div id="controlPage" class="page active">
+
+            <div class="status">
+
+                <div class="status-row">
+                    <span class="label">Firebase</span>
+
+                    <span
+                        id="firebaseStatus"
+                        class="value disconnected"
+                    >
+                        CONNECTING...
+                    </span>
+                </div>
+
+                <div class="status-row">
+                    <span class="label">Auto Trading</span>
+
+                    <span
+                        id="tradingStatus"
+                        class="value trading-off"
+                    >
+                        OFF
+                    </span>
+                </div>
+
+                <div class="status-row">
+                    <span class="label">Trade Direction</span>
+
+                    <span
+                        id="directionStatus"
+                        class="value connected"
+                    >
+                        BOTH
+                    </span>
+                </div>
+
+                <div class="status-row">
+                    <span class="label">Emergency Stop</span>
+
+                    <span
+                        id="emergencyStatus"
+                        class="value trading-off"
+                    >
+                        OFF
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="direction-controls">
+
+                <button
+                    id="buyOnlyButton"
+                    class="direction-button"
+                    onclick="setTradeDirection('buy')"
+                >
+                    BUY ONLY
+                </button>
+
+                <button
+                    id="bothButton"
+                    class="direction-button active"
+                    onclick="setTradeDirection('both')"
+                >
+                    BOTH
+                </button>
+
+                <button
+                    id="sellOnlyButton"
+                    class="direction-button"
+                    onclick="setTradeDirection('sell')"
+                >
+                    SELL ONLY
+                </button>
+
+            </div>
+
+            <button
+                id="toggleButton"
+                class="on"
+                onclick="toggleTrading()"
+            >
+                TURN TRADING ON
+            </button>
+
+            <button
+                id="emergencyButton"
+                class="emergency"
+                onclick="toggleEmergency()"
+            >
+                EMERGENCY STOP
+            </button>
+
+        </div>
+
+        <!-- =================================================
+             STATS PAGE
+        ================================================== -->
+
+        <div id="statsPage" class="page stats-page">
+
+            <div class="stats-heading">
+                <div class="stats-title">PERFORMANCE</div>
+                <div class="stats-subtitle">
+                    Trade analytics • Firebase history
+                </div>
+            </div>
+
+            <div class="date-filter">
+
+                <div class="date-field">
+                    <label for="statsFrom">FROM DATE</label>
+                    <input
+                        id="statsFrom"
+                        type="date"
+                    >
+                </div>
+
+                <div class="date-field">
+                    <label for="statsTo">TO DATE</label>
+                    <input
+                        id="statsTo"
+                        type="date"
+                    >
+                </div>
+
+                <button
+                    class="stats-filter-button"
+                    onclick="applyStatsFilter()"
+                >
+                    APPLY
+                </button>
+
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-label">Trades Taken</div>
+                    <div id="statTrades" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Win Rate</div>
+                    <div id="statWinRate" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Average Win</div>
+                    <div id="statAvgWin" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Average Loss</div>
+                    <div id="statAvgLoss" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Net Profit</div>
+                    <div id="statNetProfit" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Profitability</div>
+                    <div id="statProfitability" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Max Drawdown</div>
+                    <div id="statDrawdown" class="stat-value">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Lowest Balance</div>
+                    <div id="statLowestBalance" class="stat-value">—</div>
+                </div>
+
+            </div>
+
+            <div class="equity-card">
+
+                <div class="section-title">
+                    Balance / Equity Curve
+                </div>
+
+                <canvas
+                    id="equityChart"
+                    class="equity-chart"
+                ></canvas>
+
+                <div
+                    id="chartEmpty"
+                    class="chart-empty"
+                    style="display:none;"
+                >
+                    NO TRADE DATA FOR THIS PERIOD
+                </div>
+
+            </div>
+
+            <div class="trade-history">
+
+                <div class="section-title">
+                    Trade History
+                </div>
+
+                <div class="trade-table-wrap">
+
+                    <table class="trade-table">
+
+                        <thead>
+                            <tr>
+                                <th>DATE</th>
+                                <th>TYPE</th>
+                                <th>RESULT</th>
+                                <th>P/L</th>
+                                <th>BALANCE</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tradeTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align:center;color:#555;">
+                                    Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div id="statsStatus" class="stats-status">
+                Waiting for trade history...
+            </div>
+
+        </div>
+
+        <div class="footer">
+
+            <span>ZENITSU</span>
+            &nbsp;•&nbsp;
+            Remote MT4 Control
+            &nbsp;•&nbsp;
+            Firebase
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ============================================================
+   FIREBASE
+============================================================ */
+
+const FIREBASE_URL =
+    "https://zenitsu-d7e89-default-rtdb.firebaseio.com";
+
+
+let enabled = false;
+
+let emergencyStop = false;
+
+let tradeDirection = "both";
+
+
+/* ============================================================
+   FIREBASE GET
+============================================================ */
+
+async function getValue(field) {
+
+    const response =
+        await fetch(
+            `${FIREBASE_URL}/${field}.json`
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Firebase request failed"
+        );
+
+    }
+
+    return await response.json();
+
+}
+
+
+/* ============================================================
+   FIREBASE SET
+============================================================ */
+
+async function setValue(field, value) {
+
+    const response =
+        await fetch(
+            `${FIREBASE_URL}/${field}.json`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(value)
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Firebase update failed"
+        );
+
+    }
+
+
+    return await response.json();
+
+}
+
+
+/* ============================================================
+   PAGE NAVIGATION
+============================================================ */
+
+function showPage(page) {
+
+    const controlPage =
+        document.getElementById("controlPage");
+
+    const statsPage =
+        document.getElementById("statsPage");
+
+    const controlNav =
+        document.getElementById("controlNav");
+
+    const statsNav =
+        document.getElementById("statsNav");
+
+    const pageSubtitle =
+        document.getElementById("pageSubtitle");
+
+
+    if (page === "stats") {
+
+        controlPage.classList.remove("active");
+        statsPage.classList.add("active");
+
+        controlNav.classList.remove("active");
+        statsNav.classList.add("active");
+
+        pageSubtitle.textContent =
+            "Performance Analytics";
+
+        loadStats();
+
+    } else {
+
+        statsPage.classList.remove("active");
+        controlPage.classList.add("active");
+
+        statsNav.classList.remove("active");
+        controlNav.classList.add("active");
+
+        pageSubtitle.textContent =
+            "Trading Control";
+
+    }
+
+}
+
+
+/* ============================================================
+   UPDATE CONTROL UI
+============================================================ */
+
+function updateUI() {
+
+    const tradingStatus =
+        document.getElementById(
+            "tradingStatus"
+        );
+
+    const toggleButton =
+        document.getElementById(
+            "toggleButton"
+        );
+
+    const emergencyStatus =
+        document.getElementById(
+            "emergencyStatus"
+        );
+
+    const directionStatus =
+        document.getElementById(
+            "directionStatus"
+        );
+
+    const buyOnlyButton =
+        document.getElementById(
+            "buyOnlyButton"
+        );
+
+    const bothButton =
+        document.getElementById(
+            "bothButton"
+        );
+
+    const sellOnlyButton =
+        document.getElementById(
+            "sellOnlyButton"
+        );
+
+
+    /* AUTO TRADING */
+
+    if (enabled) {
+
+        tradingStatus.textContent =
+            "ON";
+
+        tradingStatus.className =
+            "value trading-on";
+
+        toggleButton.textContent =
+            "TURN TRADING OFF";
+
+        toggleButton.className =
+            "off";
+
+    }
+
+    else {
+
+        tradingStatus.textContent =
+            "OFF";
+
+        tradingStatus.className =
+            "value trading-off";
+
+        toggleButton.textContent =
+            "TURN TRADING ON";
+
+        toggleButton.className =
+            "on";
+
+    }
+
+
+    /* EMERGENCY STOP */
+
+    if (emergencyStop) {
+
+        emergencyStatus.textContent =
+            "ACTIVE";
+
+        emergencyStatus.className =
+            "value disconnected";
+
+    }
+
+    else {
+
+        emergencyStatus.textContent =
+            "OFF";
+
+        emergencyStatus.className =
+            "value connected";
+
+    }
+
+
+    /* TRADE DIRECTION */
+
+    const directionText = {
+
+        buy: "BUY ONLY",
+
+        sell: "SELL ONLY",
+
+        both: "BOTH"
+
+    };
+
+    directionStatus.textContent =
+        directionText[tradeDirection] ||
+        "BOTH";
+
+    directionStatus.className =
+        "value connected";
+
+
+    buyOnlyButton.className =
+        "direction-button" +
+        (
+            tradeDirection === "buy"
+            ? " active"
+            : ""
+        );
+
+    bothButton.className =
+        "direction-button" +
+        (
+            tradeDirection === "both"
+            ? " active"
+            : ""
+        );
+
+    sellOnlyButton.className =
+        "direction-button" +
+        (
+            tradeDirection === "sell"
+            ? " active"
+            : ""
+        );
+
+}
+
+
+/* ============================================================
+   LOAD FIREBASE STATE
+============================================================ */
+
+async function loadState() {
+
+    try {
+
+        const result =
+            await Promise.all([
+
+                getValue("enabled"),
+
+                getValue("emergencyStop"),
+
+                getValue("tradeDirection")
+
+            ]);
+
+
+        enabled =
+            result[0] === true;
+
+        emergencyStop =
+            result[1] === true;
+
+
+        if (
+            result[2] === "buy" ||
+            result[2] === "sell"
+        ) {
+
+            tradeDirection =
+                result[2];
+
+        }
+
+        else {
+
+            tradeDirection =
+                "both";
+
+        }
+
+
+        const firebaseStatus =
+            document.getElementById(
+                "firebaseStatus"
+            );
+
+        firebaseStatus.textContent =
+            "CONNECTED";
+
+        firebaseStatus.className =
+            "value connected";
+
+
+        updateUI();
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        const firebaseStatus =
+            document.getElementById(
+                "firebaseStatus"
+            );
+
+        firebaseStatus.textContent =
+            "DISCONNECTED";
+
+        firebaseStatus.className =
+            "value disconnected";
+
+    }
+
+}
+
+
+/* ============================================================
+   TOGGLE TRADING
+============================================================ */
+
+async function toggleTrading() {
+
+    try {
+
+        const newValue =
+            !enabled;
+
+
+        await setValue(
+            "enabled",
+            newValue
+        );
+
+
+        enabled =
+            newValue;
+
+
+        updateUI();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "Could not update trading status."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   TRADE DIRECTION
+============================================================ */
+
+async function setTradeDirection(direction) {
+
+    if (
+        direction !== "buy" &&
+        direction !== "sell" &&
+        direction !== "both"
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await setValue(
+            "tradeDirection",
+            direction
+        );
+
+        tradeDirection =
+            direction;
+
+        updateUI();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "Could not update trade direction."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   EMERGENCY STOP
+============================================================ */
+
+async function toggleEmergency() {
+
+    const newValue =
+        !emergencyStop;
+
+
+    try {
+
+        await setValue(
+            "emergencyStop",
+            newValue
+        );
+
+
+        emergencyStop =
+            newValue;
+
+
+        updateUI();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "Could not update emergency stop."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   STATS HELPERS
+============================================================ */
+
+let allTrades = [];
+
+
+function parseTradeDate(trade) {
+
+    const raw =
+        trade.closeTime ||
+        trade.closedAt ||
+        trade.openTime ||
+        trade.date ||
+        trade.timestamp;
+
+    if (raw === undefined || raw === null) {
+        return null;
+    }
+
+    if (
+        typeof raw === "number" ||
+        /^\d+$/.test(String(raw))
+    ) {
+
+        let number =
+            Number(raw);
+
+        if (number < 100000000000) {
+            number *= 1000;
+        }
+
+        const d =
+            new Date(number);
+
+        return isNaN(d.getTime())
+            ? null
+            : d;
+
+    }
+
+    const d =
+        new Date(raw);
+
+    return isNaN(d.getTime())
+        ? null
+        : d;
+
+}
+
+
+function getTradeProfit(trade) {
+
+    const value =
+        trade.profit ??
+        trade.pnl ??
+        trade.PnL ??
+        trade.result ??
+        0;
+
+    const number =
+        Number(value);
+
+    return isNaN(number)
+        ? 0
+        : number;
+
+}
+
+
+function getTradeBalance(trade) {
+
+    const value =
+        trade.balance ??
+        trade.accountBalance ??
+        trade.equity ??
+        null;
+
+    if (value === null) {
+        return null;
+    }
+
+    const number =
+        Number(value);
+
+    return isNaN(number)
+        ? null
+        : number;
+
+}
+
+
+function getTradeType(trade) {
+
+    const raw =
+        String(
+            trade.type ??
+            trade.direction ??
+            (
+                trade.isBuy === true
+                ? "BUY"
+                : ""
+            )
+        ).toUpperCase();
+
+    if (
+        raw.includes("BUY")
+    ) {
+        return "BUY";
+    }
+
+    if (
+        raw.includes("SELL")
+    ) {
+        return "SELL";
+    }
+
+    return raw || "—";
+
+}
+
+
+function formatMoney(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        isNaN(value)
+    ) {
+        return "—";
+    }
+
+    return Number(value).toLocaleString(
+        undefined,
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+function formatDate(date) {
+
+    if (!date) {
+        return "—";
+    }
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            day: "2-digit",
+            month: "short"
+        }
+    );
+
+}
+
+
+function getDateString(date) {
+
+    if (!date) {
+        return null;
+    }
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+
+}
+
+
+/* ============================================================
+   LOAD STATS FROM FIREBASE
+============================================================ */
+
+async function loadStats() {
+
+    const status =
+        document.getElementById(
+            "statsStatus"
+        );
+
+    status.textContent =
+        "Loading trade history...";
+
+
+    try {
+
+        const data =
+            await getValue("trades");
+
+
+        if (!data) {
+
+            allTrades = [];
+
+        }
+
+        else if (Array.isArray(data)) {
+
+            allTrades =
+                data.filter(Boolean);
+
+        }
+
+        else {
+
+            allTrades =
+                Object.entries(data).map(
+                    ([id, trade]) => ({
+                        ...trade,
+                        id
+                    })
+                );
+
+        }
+
+
+        allTrades =
+            allTrades
+                .map(
+                    trade => ({
+                        ...trade,
+                        _date:
+                            parseTradeDate(trade),
+                        _profit:
+                            getTradeProfit(trade),
+                        _balance:
+                            getTradeBalance(trade),
+                        _type:
+                            getTradeType(trade)
+                    })
+                )
+                .filter(
+                    trade =>
+                        trade._date !== null
+                )
+                .sort(
+                    (a, b) =>
+                        a._date - b._date
+                );
+
+
+        setDefaultStatsDates();
+
+        applyStatsFilter();
+
+
+        status.textContent =
+            `${allTrades.length} trade record(s) loaded.`;
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        allTrades = [];
+
+        renderStats([]);
+
+        status.textContent =
+            "Could not load Firebase trade history.";
+
+    }
+
+}
+
+
+/* ============================================================
+   DEFAULT DATE RANGE
+============================================================ */
+
+function setDefaultStatsDates() {
+
+    const fromInput =
+        document.getElementById(
+            "statsFrom"
+        );
+
+    const toInput =
+        document.getElementById(
+            "statsTo"
+        );
+
+
+    if (
+        fromInput.value ||
+        toInput.value
+    ) {
+        return;
+    }
+
+
+    if (allTrades.length === 0) {
+        return;
+    }
+
+
+    fromInput.value =
+        getDateString(
+            allTrades[0]._date
+        );
+
+    toInput.value =
+        getDateString(
+            allTrades[
+                allTrades.length - 1
+            ]._date
+        );
+
+}
+
+
+/* ============================================================
+   APPLY STATS FILTER
+============================================================ */
+
+function applyStatsFilter() {
+
+    const fromValue =
+        document.getElementById(
+            "statsFrom"
+        ).value;
+
+    const toValue =
+        document.getElementById(
+            "statsTo"
+        ).value;
+
+
+    const from =
+        fromValue
+        ? new Date(
+            `${fromValue}T00:00:00`
+        )
+        : null;
+
+    const to =
+        toValue
+        ? new Date(
+            `${toValue}T23:59:59.999`
+        )
+        : null;
+
+
+    const filtered =
+        allTrades.filter(
+            trade => {
+
+                if (
+                    from &&
+                    trade._date < from
+                ) {
+                    return false;
+                }
+
+                if (
+                    to &&
+                    trade._date > to
+                ) {
+                    return false;
+                }
+
+                return true;
+
+            }
+        );
+
+
+    renderStats(filtered);
+
+}
+
+
+/* ============================================================
+   CALCULATE + RENDER STATS
+============================================================ */
+
+function renderStats(trades) {
+
+    const total =
+        trades.length;
+
+    const wins =
+        trades.filter(
+            t => t._profit > 0
+        );
+
+    const losses =
+        trades.filter(
+            t => t._profit < 0
+        );
+
+
+    const netProfit =
+        trades.reduce(
+            (sum, t) =>
+                sum + t._profit,
+            0
+        );
+
+
+    const winRate =
+        total
+        ? (
+            wins.length /
+            total
+        ) * 100
+        : 0;
+
+
+    const avgWin =
+        wins.length
+        ? wins.reduce(
+            (sum, t) =>
+                sum + t._profit,
+            0
+        ) / wins.length
+        : 0;
+
+
+    const avgLoss =
+        losses.length
+        ? losses.reduce(
+            (sum, t) =>
+                sum + t._profit,
+            0
+        ) / losses.length
+        : 0;
+
+
+    const balances =
+        trades
+            .map(
+                t => t._balance
+            )
+            .filter(
+                v =>
+                    v !== null &&
+                    isFinite(v)
+            );
+
+
+    let startingBalance =
+        null;
+
+    let lowestBalance =
+        null;
+
+    let maxDrawdownMoney =
+        0;
+
+    let maxDrawdownPercent =
+        0;
+
+
+    if (balances.length) {
+
+        lowestBalance =
+            Math.min(
+                ...balances
+            );
+
+        startingBalance =
+            balances[0];
+
+        let peak =
+            balances[0];
+
+        for (
+            const balance of balances
+        ) {
+
+            if (
+                balance > peak
+            ) {
+                peak = balance;
+            }
+
+            const drawdown =
+                peak - balance;
+
+            const drawdownPercent =
+                peak > 0
+                ? (
+                    drawdown /
+                    peak
+                ) * 100
+                : 0;
+
+            if (
+                drawdown >
+                maxDrawdownMoney
+            ) {
+                maxDrawdownMoney =
+                    drawdown;
+            }
+
+            if (
+                drawdownPercent >
+                maxDrawdownPercent
+            ) {
+                maxDrawdownPercent =
+                    drawdownPercent;
+            }
+
+        }
+
+    }
+
+
+    const profitability =
+        startingBalance !== null &&
+        startingBalance !== 0
+        ? (
+            netProfit /
+            startingBalance
+        ) * 100
+        : 0;
+
+
+    setStat(
+        "statTrades",
+        String(total)
+    );
+
+    setStat(
+        "statWinRate",
+        `${winRate.toFixed(2)}%`
+    );
+
+    setStat(
+        "statAvgWin",
+        avgWin
+        ? formatMoney(avgWin)
+        : "0.00"
+    );
+
+    setStat(
+        "statAvgLoss",
+        avgLoss
+        ? formatMoney(avgLoss)
+        : "0.00"
+    );
+
+    setStat(
+        "statNetProfit",
+        formatMoney(netProfit)
+    );
+
+    setStat(
+        "statProfitability",
+        `${profitability.toFixed(2)}%`
+    );
+
+    setStat(
+        "statDrawdown",
+        `${maxDrawdownPercent.toFixed(2)}%`
+    );
+
+    setStat(
+        "statLowestBalance",
+        lowestBalance === null
+        ? "—"
+        : formatMoney(lowestBalance)
+    );
+
+
+    setValueClass(
+        "statNetProfit",
+        netProfit
+    );
+
+    setValueClass(
+        "statProfitability",
+        profitability
+    );
+
+    setValueClass(
+        "statDrawdown",
+        -maxDrawdownPercent
+    );
+
+
+    renderEquityChart(trades);
+
+    renderTradeTable(
+        trades
+            .slice()
+            .sort(
+                (a, b) =>
+                    b._date - a._date
+            )
+    );
+
+}
+
+
+function setStat(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+        element.textContent =
+            value;
+    }
+
+}
+
+
+function setValueClass(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) {
+        return;
+    }
+
+    element.classList.remove(
+        "positive",
+        "negative"
+    );
+
+    if (value > 0) {
+        element.classList.add(
+            "positive"
+        );
+    }
+
+    if (value < 0) {
+        element.classList.add(
+            "negative"
+        );
+    }
+
+}
+
+
+/* ============================================================
+   EQUITY CHART
+============================================================ */
+
+function renderEquityChart(trades) {
+
+    const canvas =
+        document.getElementById(
+            "equityChart"
+        );
+
+    const empty =
+        document.getElementById(
+            "chartEmpty"
+        );
+
+
+    const points =
+        trades
+            .filter(
+                t =>
+                    t._balance !== null
+            )
+            .sort(
+                (a, b) =>
+                    a._date - b._date
+            );
+
+
+    if (
+        !points.length
+    ) {
+
+        canvas.style.display =
+            "none";
+
+        empty.style.display =
+            "flex";
+
+        return;
+
+    }
+
+
+    canvas.style.display =
+        "block";
+
+    empty.style.display =
+        "none";
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    const dpr =
+        window.devicePixelRatio ||
+        1;
+
+    canvas.width =
+        rect.width * dpr;
+
+    canvas.height =
+        rect.height * dpr;
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    const width =
+        rect.width;
+
+    const height =
+        rect.height;
+
+    const padding = 12;
+
+
+    const values =
+        points.map(
+            p => p._balance
+        );
+
+
+    const min =
+        Math.min(...values);
+
+    const max =
+        Math.max(...values);
+
+    const range =
+        max - min || 1;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /* Grid */
+
+    ctx.strokeStyle =
+        "rgba(255,255,255,0.06)";
+
+    ctx.lineWidth = 1;
+
+    for (
+        let i = 1;
+        i < 4;
+        i++
+    ) {
+
+        const y =
+            padding +
+            (
+                (height - padding * 2) *
+                i / 4
+            );
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            padding,
+            y
+        );
+
+        ctx.lineTo(
+            width - padding,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /* Curve */
+
+    ctx.beginPath();
+
+    points.forEach(
+        (point, index) => {
+
+            const x =
+                points.length === 1
+                ? width / 2
+                : padding +
+                    (
+                        (width - padding * 2) *
+                        index /
+                        (points.length - 1)
+                    );
+
+            const y =
+                height -
+                padding -
+                (
+                    (
+                        point._balance -
+                        min
+                    ) /
+                    range
+                ) *
+                (
+                    height -
+                    padding * 2
+                );
+
+
+            if (index === 0) {
+                ctx.moveTo(x, y);
+            }
+
+            else {
+                ctx.lineTo(x, y);
+            }
+
+        }
+    );
+
+
+    ctx.strokeStyle =
+        "#ffd21c";
+
+    ctx.lineWidth = 2;
+
+    ctx.shadowBlur = 10;
+
+    ctx.shadowColor =
+        "rgba(255,210,28,0.35)";
+
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+
+
+    /* Points */
+
+    points.forEach(
+        (point, index) => {
+
+            const x =
+                points.length === 1
+                ? width / 2
+                : padding +
+                    (
+                        (width - padding * 2) *
+                        index /
+                        (points.length - 1)
+                    );
+
+            const y =
+                height -
+                padding -
+                (
+                    (
+                        point._balance -
+                        min
+                    ) /
+                    range
+                ) *
+                (
+                    height -
+                    padding * 2
+                );
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                2.5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle =
+                "#ffe86a";
+
+            ctx.fill();
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   TRADE TABLE
+============================================================ */
+
+function renderTradeTable(trades) {
+
+    const body =
+        document.getElementById(
+            "tradeTableBody"
+        );
+
+
+    if (!trades.length) {
+
+        body.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        color:#555;
+                        padding:18px;
+                    "
+                >
+                    NO TRADE DATA FOR THIS PERIOD
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    const maxRows =
+        100;
+
+
+    body.innerHTML =
+        trades
+            .slice(0, maxRows)
+            .map(
+                trade => {
+
+                    const profit =
+                        trade._profit;
+
+                    const result =
+                        profit > 0
+                        ? "WIN"
+                        : profit < 0
+                        ? "LOSS"
+                        : "BREAKEVEN";
+
+                    const resultClass =
+                        profit > 0
+                        ? "win"
+                        : profit < 0
+                        ? "loss"
+                        : "";
+
+
+                    return `
+                        <tr>
+                            <td>
+                                ${formatDate(
+                                    trade._date
+                                )}
+                            </td>
+
+                            <td>
+                                ${trade._type}
+                            </td>
+
+                            <td
+                                class="${resultClass}"
+                            >
+                                ${result}
+                            </td>
+
+                            <td
+                                class="${resultClass}"
+                            >
+                                ${formatMoney(
+                                    profit
+                                )}
+                            </td>
+
+                            <td>
+                                ${
+                                    trade._balance === null
+                                    ? "—"
+                                    : formatMoney(
+                                        trade._balance
+                                    )
+                                }
+                            </td>
+                        </tr>
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
+
+loadState();
+
+
+/* ============================================================
+   KEEP CONTROL DASHBOARD SYNCHRONIZED
+============================================================ */
+
+setInterval(
+    loadState,
+    3000
+);
+
+
+/* ============================================================
+   REDRAW CHART ON RESIZE
+============================================================ */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        const statsPage =
+            document.getElementById(
+                "statsPage"
+            );
+
+        if (
+            statsPage.classList.contains(
+                "active"
+            )
+        ) {
+
+            applyStatsFilter();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
