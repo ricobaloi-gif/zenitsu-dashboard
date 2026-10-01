@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Zenitsu Trading Control</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --yellow: #ffd21c;
+            --yellow-bright: #ffe86a;
+            --yellow-dark: #b88a00;
+
+            --black: #050505;
+            --dark: #090909;
+            --card: rgba(14, 14, 14, 0.88);
+
+            --green: #35e58a;
+            --red: #ff4545;
+            --text: #ffffff;
+            --muted: #929292;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+
+            background:
+                radial-gradient(
+                    circle at 50% 20%,
+                    rgba(255, 210, 28, 0.12),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    145deg,
+                    #020202,
+                    #0b0b0b 50%,
+                    #030303
+                );
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 18px;
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+
+        /* =====================================================
+           PARTICLES
+        ===================================================== */
+
+        .particles {
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            overflow: hidden;
+
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+
+            width: 3px;
+            height: 3px;
+
+            background: var(--yellow);
+
+            border-radius: 50%;
+
+            opacity: 0;
+
+            box-shadow:
+                0 0 8px var(--yellow),
+                0 0 16px rgba(255, 210, 28, 0.7);
+
+            animation:
+                particleFly linear infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 5%;
+            animation-duration: 7s;
+            animation-delay: -2s;
+        }
+
+        .particle:nth-child(2) {
+            left: 13%;
+            animation-duration: 10s;
+            animation-delay: -7s;
+        }
+
+        .particle:nth-child(3) {
+            left: 22%;
+            animation-duration: 8s;
+            animation-delay: -4s;
+        }
+
+        .particle:nth-child(4) {
+            left: 31%;
+            animation-duration: 12s;
+            animation-delay: -9s;
+        }
+
+        .particle:nth-child(5) {
+            left: 40%;
+            animation-duration: 9s;
+            animation-delay: -3s;
+        }
+
+        .particle:nth-child(6) {
+            left: 49%;
+            animation-duration: 11s;
+            animation-delay: -8s;
+        }
+
+        .particle:nth-child(7) {
+            left: 58%;
+            animation-duration: 7s;
+            animation-delay: -5s;
+        }
+
+        .particle:nth-child(8) {
+            left: 67%;
+            animation-duration: 10s;
+            animation-delay: -1s;
+        }
+
+        .particle:nth-child(9) {
+            left: 76%;
+            animation-duration: 8s;
+            animation-delay: -6s;
+        }
+
+        .particle:nth-child(10) {
+            left: 85%;
+            animation-duration: 12s;
+            animation-delay: -10s;
+        }
+
+        .particle:nth-child(11) {
+            left: 93%;
+            animation-duration: 9s;
+            animation-delay: -4s;
+        }
+
+        @keyframes particleFly {
+
+            0% {
+                transform:
+                    translateY(110vh)
+                    translateX(0)
+                    rotate(0deg);
+
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            50% {
+                transform:
+                    translateY(50vh)
+                    translateX(35px)
+                    rotate(180deg);
+
+                opacity: 0.45;
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform:
+                    translateY(-10vh)
+                    translateX(-25px)
+                    rotate(360deg);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* =====================================================
+           EXTRA LIGHTNING PARTICLES
+        ===================================================== */
+
+        .spark {
+            position: absolute;
+
+            width: 18px;
+            height: 2px;
+
+            background: var(--yellow);
+
+            box-shadow:
+                0 0 8px var(--yellow),
+                0 0 18px var(--yellow);
+
+            transform: rotate(-35deg);
+
+            opacity: 0;
+
+            animation: sparkFly 5s linear infinite;
+        }
+
+        .spark:nth-child(12) {
+            left: 20%;
+            top: 20%;
+            animation-delay: -2s;
+        }
+
+        .spark:nth-child(13) {
+            left: 75%;
+            top: 30%;
+            animation-delay: -4s;
+        }
+
+        .spark:nth-child(14) {
+            left: 60%;
+            top: 75%;
+            animation-delay: -1s;
+        }
+
+        @keyframes sparkFly {
+
+            0% {
+                opacity: 0;
+                transform:
+                    translate(0, 0)
+                    rotate(-35deg)
+                    scale(0.4);
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+
+                transform:
+                    translate(80px, -50px)
+                    rotate(-35deg)
+                    scale(1);
+            }
+
+            100% {
+                opacity: 0;
+
+                transform:
+                    translate(160px, -100px)
+                    rotate(-35deg)
+                    scale(0.2);
+            }
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(22, 22, 22, 0.96),
+                    rgba(7, 7, 7, 0.96)
+                );
+
+            border: 1px solid rgba(255, 210, 28, 0.22);
+
+            border-radius: 28px;
+
+            padding: 0 24px 24px;
+
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, 0.8),
+                0 0 50px rgba(255, 210, 28, 0.06);
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        /* =====================================================
+           TOP YELLOW LINE
+        ===================================================== */
+
+        .top-line {
+
+            height: 4px;
+
+            margin:
+                0 -24px 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--yellow),
+                    var(--yellow-bright),
+                    var(--yellow),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 15px rgba(255, 210, 28, 0.7);
+        }
+
+
+        /* =====================================================
+           HERO IMAGE
+        ===================================================== */
+
+        .hero {
+
+            position: relative;
+
+            height: 215px;
+
+            margin:
+                0 -24px 20px;
+
+            overflow: hidden;
+
+            background: #050505;
+        }
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent 35%,
+                    rgba(5, 5, 5, 0.25) 55%,
+                    #080808 100%
+                );
+        }
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 50% 30%,
+                    rgba(255, 210, 28, 0.18),
+                    transparent 55%
+                );
+
+            z-index: 1;
+        }
+
+        .hero img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            object-position: center;
+
+            display: block;
+
+            filter:
+                saturate(1.1)
+                contrast(1.08);
+
+            transform: scale(1.02);
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .brand {
+
+            position: relative;
+
+            margin-top: -15px;
+
+            z-index: 10;
+
+            text-align: center;
+        }
+
+        .brand-name {
+
+            font-size: 34px;
+
+            font-weight: 900;
+
+            letter-spacing: 5px;
+
+            color: white;
+
+            text-shadow:
+                0 0 10px rgba(255, 210, 28, 0.25);
+        }
+
+        .brand-name span {
+
+            color: var(--yellow);
+
+            text-shadow:
+                0 0 12px rgba(255, 210, 28, 0.6),
+                0 0 30px rgba(255, 210, 28, 0.2);
+        }
+
+        .subtitle {
+
+            color: #858585;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-top: 6px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =====================================================
+           STATUS PANEL
+        ===================================================== */
+
+        .status {
+
+            border-radius: 18px;
+
+            padding: 17px;
+
+            margin-bottom: 18px;
+
+            background:
+                rgba(5, 5, 5, 0.75);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.07);
+
+            box-shadow:
+                inset 0 1px rgba(255, 255, 255, 0.03);
+        }
+
+        .status-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 14px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+
+            color: #858585;
+
+            font-size: 13px;
+
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+
+            font-weight: 800;
+
+            font-size: 12px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           STATUS DOT
+        ===================================================== */
+
+        .value::before {
+
+            content: "";
+
+            display: inline-block;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            margin-right: 7px;
+
+            vertical-align: 1px;
+
+            background: currentColor;
+
+            box-shadow:
+                0 0 8px currentColor;
+        }
+
+        .connected {
+            color: var(--green);
+        }
+
+        .disconnected {
+            color: var(--red);
+        }
+
+        .trading-on {
+            color: var(--yellow);
+        }
+
+        .trading-off {
+            color: #777;
+        }
+
+
+        /* =====================================================
+           TRADE DIRECTION
+        ===================================================== */
+
+        .direction-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 9px;
+        }
+
+        .direction-button {
+            width: 100%;
+            margin-top: 0;
+            padding: 13px 6px;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.055);
+            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+
+        .direction-button.active {
+            background: linear-gradient(
+                135deg,
+                #ffe45b,
+                #f6c800
+            );
+            color: #090909;
+            box-shadow:
+                0 6px 22px rgba(255, 210, 28, 0.18);
+        }
+
+
+        /* =====================================================
+           MAIN TRADING BUTTON
+        ===================================================== */
+
+        button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 17px;
+
+            padding: 19px;
+
+            font-size: 15px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+
+            cursor: pointer;
+
+            margin-top: 9px;
+
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+
+            transform: scale(0.97);
+        }
+
+
+        .on {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffe45b,
+                    #f6c800
+                );
+
+            color: #090909;
+
+            box-shadow:
+                0 8px 30px rgba(255, 210, 28, 0.2);
+        }
+
+        .on:hover {
+
+            box-shadow:
+                0 8px 40px rgba(255, 210, 28, 0.4);
+        }
+
+
+        .off {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff5656,
+                    #d92f2f
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 30px rgba(255, 60, 60, 0.16);
+        }
+
+
+        /* =====================================================
+           EMERGENCY
+        ===================================================== */
+
+        .emergency {
+
+            background:
+                rgba(255, 255, 255, 0.055);
+
+            color: #d7d7d7;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow: none;
+        }
+
+        .emergency:hover {
+
+            background:
+                rgba(255, 60, 60, 0.12);
+
+            border-color:
+                rgba(255, 60, 60, 0.3);
+
+            color: #ff6868;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #5f5f5f;
+
+            font-size: 10px;
+
+            letter-spacing: 0.8px;
+        }
+
+        .footer span {
+
+            color: #888;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                border-radius: 25px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .top-line {
+                margin-left: -20px;
+                margin-right: -20px;
+            }
+
+            .hero {
+                margin-left: -20px;
+                margin-right: -20px;
+
+                height: 205px;
+            }
+
+            .brand-name {
+                font-size: 31px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ANIMATED PARTICLES
+========================================================= -->
+
+<div class="particles">
+
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+
+</div>
+
+
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="top-line"></div>
+
+
+        <!-- HERO -->
+
+        <div class="hero">
+
+            <img
+                src="Zenitsu.jpg"
+                alt="Zenitsu"
+            >
+
+        </div>
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-name">
+                ZEN<span>ITSU</span>
+            </div>
+
+            <div class="subtitle">
+                Trading Control
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="status">
+
+            <div class="status-row">
+
+                <span class="label">
+                    Firebase
+                </span>
+
+                <span
+                    id="firebaseStatus"
+                    class="value disconnected"
+                >
+                    CONNECTING...
+                </span>
+
+            </div>
+
+
+            <div class="status-row">
+
+                <span class="label">
+                    Auto Trading
+                </span>
+
+                <span
+                    id="tradingStatus"
+                    class="value trading-off"
+                >
+                    OFF
+                </span>
+
+            </div>
+
+
+            <div class="status-row">
+
+                <span class="label">
+                    Trade Direction
+                </span>
+
+                <span
+                    id="directionStatus"
+                    class="value trading-off"
+                >
+                    BOTH
+                </span>
+
+            </div>
+
+
+            <div class="status-row">
+
+                <span class="label">
+                    Emergency Stop
+                </span>
+
+                <span
+                    id="emergencyStatus"
+                    class="value trading-off"
+                >
+                    OFF
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- TRADE DIRECTION -->
+
+        <div class="direction-controls">
+
+            <button
+                id="buyOnlyButton"
+                class="direction-button"
+                onclick="setTradeDirection('buy')"
+            >
+                BUY ONLY
+            </button>
+
+            <button
+                id="bothButton"
+                class="direction-button active"
+                onclick="setTradeDirection('both')"
+            >
+                BOTH
+            </button>
+
+            <button
+                id="sellOnlyButton"
+                class="direction-button"
+                onclick="setTradeDirection('sell')"
+            >
+                SELL ONLY
+            </button>
+
+        </div>
+
+
+        <!-- TRADING BUTTON -->
+
+        <button
+            id="toggleButton"
+            class="on"
+            onclick="toggleTrading()"
+        >
+            TURN TRADING ON
+        </button>
+
+
+        <!-- EMERGENCY BUTTON -->
+
+        <button
+            id="emergencyButton"
+            class="emergency"
+            onclick="toggleEmergency()"
+        >
+            EMERGENCY STOP
+        </button>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            <span>ZENITSU</span>
+            &nbsp;•&nbsp;
+            Remote MT4 Control
+            &nbsp;•&nbsp;
+            Firebase
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* ============================================================
+   FIREBASE
+============================================================ */
+
+const FIREBASE_URL =
+    "https://zenitsu-d7e89-default-rtdb.firebaseio.com";
+
+
+let enabled = false;
+
+let emergencyStop = false;
+let tradeDirection = "both";
+
+
+/* ============================================================
+   FIREBASE GET
+============================================================ */
+
+async function getValue(field) {
+
+    const response =
+        await fetch(
+            `${FIREBASE_URL}/${field}.json`
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Firebase request failed"
+        );
+
+    }
+
+    return await response.json();
+}
+
+
+/* ============================================================
+   FIREBASE SET
+============================================================ */
+
+async function setValue(field, value) {
+
+    const response =
+        await fetch(
+            `${FIREBASE_URL}/${field}.json`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(value)
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Firebase update failed"
+        );
+
+    }
+
+
+    return await response.json();
+}
+
+
+/* ============================================================
+   UPDATE UI
+============================================================ */
+
+function updateUI() {
+
+    const tradingStatus =
+        document.getElementById(
+            "tradingStatus"
+        );
+
+
+    const toggleButton =
+        document.getElementById(
+            "toggleButton"
+        );
+
+
+    const emergencyStatus =
+        document.getElementById(
+            "emergencyStatus"
+        );
+
+    const directionStatus =
+        document.getElementById(
+            "directionStatus"
+        );
+
+    const buyOnlyButton =
+        document.getElementById(
+            "buyOnlyButton"
+        );
+
+    const bothButton =
+        document.getElementById(
+            "bothButton"
+        );
+
+    const sellOnlyButton =
+        document.getElementById(
+            "sellOnlyButton"
+        );
+
+
+    /*
+       AUTO TRADING
+    */
+
+    if (enabled) {
+
+        tradingStatus.textContent =
+            "ON";
+
+        tradingStatus.className =
+            "value trading-on";
+
+
+        toggleButton.textContent =
+            "TURN TRADING OFF";
+
+        toggleButton.className =
+            "off";
+
+    }
+
+    else {
+
+        tradingStatus.textContent =
+            "OFF";
+
+        tradingStatus.className =
+            "value trading-off";
+
+
+        toggleButton.textContent =
+            "TURN TRADING ON";
+
+        toggleButton.className =
+            "on";
+
+    }
+
+
+    /*
+       TRADE DIRECTION
+    */
+
+    directionStatus.textContent =
+        tradeDirection.toUpperCase();
+
+    directionStatus.className =
+        "value trading-on";
+
+    buyOnlyButton.className =
+        "direction-button" +
+        (tradeDirection === "buy"
+            ? " active"
+            : "");
+
+    bothButton.className =
+        "direction-button" +
+        (tradeDirection === "both"
+            ? " active"
+            : "");
+
+    sellOnlyButton.className =
+        "direction-button" +
+        (tradeDirection === "sell"
+            ? " active"
+            : "");
+
+
+    /*
+       EMERGENCY STOP
+    */
+
+    if (emergencyStop) {
+
+        emergencyStatus.textContent =
+            "ACTIVE";
+
+        emergencyStatus.className =
+            "value disconnected";
+
+    }
+
+    else {
+
+        emergencyStatus.textContent =
+            "OFF";
+
+        emergencyStatus.className =
+            "value connected";
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD FIREBASE STATE
+============================================================ */
+
+async function loadState() {
+
+    try {
+
+        const result =
+            await Promise.all([
+
+                getValue("enabled"),
+
+                getValue("emergencyStop"),
+
+                getValue("tradeDirection")
+
+            ]);
+
+
+        enabled =
+            result[0] === true;
+
+
+        emergencyStop =
+            result[1] === true;
+
+        tradeDirection =
+            (
+                result[2] === "buy" ||
+                result[2] === "sell"
+            )
+            ? result[2]
+            : "both";
+
+
+        /*
+           Firebase connected
+        */
+
+        const firebaseStatus =
+            document.getElementById(
+                "firebaseStatus"
+            );
+
+
+        firebaseStatus.textContent =
+            "CONNECTED";
+
+
+        firebaseStatus.className =
+            "value connected";
+
+
+        updateUI();
+
+    }
+
+
+    catch(error) {
+
+        console.error(error);
+
+
+        const firebaseStatus =
+            document.getElementById(
+                "firebaseStatus"
+            );
+
+
+        firebaseStatus.textContent =
+            "DISCONNECTED";
+
+
+        firebaseStatus.className =
+            "value disconnected";
+
+    }
+
+}
+
+
+/* ============================================================
+   TOGGLE TRADING
+============================================================ */
+
+async function toggleTrading() {
+
+    try {
+
+        const newValue =
+            !enabled;
+
+
+        await setValue(
+            "enabled",
+            newValue
+        );
+
+
+        enabled =
+            newValue;
+
+
+        updateUI();
+
+    }
+
+
+    catch(error) {
+
+        alert(
+            "Could not update trading status."
+        );
+
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   TRADE DIRECTION
+============================================================ */
+
+async function setTradeDirection(direction) {
+
+    try {
+
+        await setValue(
+            "tradeDirection",
+            direction
+        );
+
+
+        tradeDirection =
+            direction;
+
+
+        updateUI();
+
+    }
+
+
+    catch(error) {
+
+        alert(
+            "Could not update trade direction."
+        );
+
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   EMERGENCY STOP
+============================================================ */
+
+async function toggleEmergency() {
+
+    const newValue =
+        !emergencyStop;
+
+
+    try {
+
+        await setValue(
+            "emergencyStop",
+            newValue
+        );
+
+
+        emergencyStop =
+            newValue;
+
+
+        updateUI();
+
+    }
+
+
+    catch(error) {
+
+        alert(
+            "Could not update emergency stop."
+        );
+
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
+
+loadState();
+
+
+/* ============================================================
+   KEEP DASHBOARD SYNCHRONIZED
+============================================================ */
+
+setInterval(
+    loadState,
+    3000
+);
+
+
+</script>
+
+
+</body>
+
+</html>
