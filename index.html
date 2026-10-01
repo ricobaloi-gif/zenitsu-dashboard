@@ -587,6 +587,42 @@
 
 
         /* =====================================================
+           TRADE DIRECTION
+        ===================================================== */
+
+        .direction-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 9px;
+        }
+
+        .direction-button {
+            width: 100%;
+            margin-top: 0;
+            padding: 13px 6px;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.055);
+            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+
+        .direction-button.active {
+            background: linear-gradient(
+                135deg,
+                #ffe45b,
+                #f6c800
+            );
+            color: #090909;
+            box-shadow:
+                0 6px 22px rgba(255, 210, 28, 0.18);
+        }
+
+
+        /* =====================================================
            MAIN TRADING BUTTON
         ===================================================== */
 
@@ -857,6 +893,22 @@
             <div class="status-row">
 
                 <span class="label">
+                    Trade Direction
+                </span>
+
+                <span
+                    id="directionStatus"
+                    class="value trading-off"
+                >
+                    BOTH
+                </span>
+
+            </div>
+
+
+            <div class="status-row">
+
+                <span class="label">
                     Emergency Stop
                 </span>
 
@@ -868,6 +920,37 @@
                 </span>
 
             </div>
+
+        </div>
+
+
+        <!-- TRADE DIRECTION -->
+
+        <div class="direction-controls">
+
+            <button
+                id="buyOnlyButton"
+                class="direction-button"
+                onclick="setTradeDirection('buy')"
+            >
+                BUY ONLY
+            </button>
+
+            <button
+                id="bothButton"
+                class="direction-button active"
+                onclick="setTradeDirection('both')"
+            >
+                BOTH
+            </button>
+
+            <button
+                id="sellOnlyButton"
+                class="direction-button"
+                onclick="setTradeDirection('sell')"
+            >
+                SELL ONLY
+            </button>
 
         </div>
 
@@ -925,6 +1008,7 @@ const FIREBASE_URL =
 let enabled = false;
 
 let emergencyStop = false;
+let tradeDirection = "both";
 
 
 /* ============================================================
@@ -1009,6 +1093,26 @@ function updateUI() {
             "emergencyStatus"
         );
 
+    const directionStatus =
+        document.getElementById(
+            "directionStatus"
+        );
+
+    const buyOnlyButton =
+        document.getElementById(
+            "buyOnlyButton"
+        );
+
+    const bothButton =
+        document.getElementById(
+            "bothButton"
+        );
+
+    const sellOnlyButton =
+        document.getElementById(
+            "sellOnlyButton"
+        );
+
 
     /*
        AUTO TRADING
@@ -1047,6 +1151,35 @@ function updateUI() {
             "on";
 
     }
+
+
+    /*
+       TRADE DIRECTION
+    */
+
+    directionStatus.textContent =
+        tradeDirection.toUpperCase();
+
+    directionStatus.className =
+        "value trading-on";
+
+    buyOnlyButton.className =
+        "direction-button" +
+        (tradeDirection === "buy"
+            ? " active"
+            : "");
+
+    bothButton.className =
+        "direction-button" +
+        (tradeDirection === "both"
+            ? " active"
+            : "");
+
+    sellOnlyButton.className =
+        "direction-button" +
+        (tradeDirection === "sell"
+            ? " active"
+            : "");
 
 
     /*
@@ -1089,7 +1222,9 @@ async function loadState() {
 
                 getValue("enabled"),
 
-                getValue("emergencyStop")
+                getValue("emergencyStop"),
+
+                getValue("tradeDirection")
 
             ]);
 
@@ -1100,6 +1235,14 @@ async function loadState() {
 
         emergencyStop =
             result[1] === true;
+
+        tradeDirection =
+            (
+                result[2] === "buy" ||
+                result[2] === "sell"
+            )
+            ? result[2]
+            : "both";
 
 
         /*
@@ -1179,6 +1322,43 @@ async function toggleTrading() {
 
         alert(
             "Could not update trading status."
+        );
+
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   TRADE DIRECTION
+============================================================ */
+
+async function setTradeDirection(direction) {
+
+    try {
+
+        await setValue(
+            "tradeDirection",
+            direction
+        );
+
+
+        tradeDirection =
+            direction;
+
+
+        updateUI();
+
+    }
+
+
+    catch(error) {
+
+        alert(
+            "Could not update trade direction."
         );
 
 
