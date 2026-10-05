@@ -752,6 +752,67 @@
 
 
         /* =====================================================
+           RISK CONTROL
+        ===================================================== */
+
+        .risk-control {
+            margin-top: 10px;
+            margin-bottom: 2px;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 210, 28, 0.14);
+            background: rgba(0, 0, 0, 0.38);
+        }
+
+        .risk-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .risk-input {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid rgba(255, 210, 28, 0.2);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.045);
+            color: #fff;
+            padding: 11px;
+            outline: none;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .risk-input:focus {
+            border-color: rgba(255, 210, 28, 0.65);
+        }
+
+        .risk-button {
+            width: auto;
+            margin-top: 0;
+            padding: 11px 16px;
+            border-radius: 11px;
+            background: var(--yellow);
+            color: #050505;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+        }
+
+        .risk-current {
+            margin-top: 8px;
+            color: #777;
+            font-size: 9px;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .risk-current span {
+            color: var(--yellow);
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
            MOBILE
         ===================================================== */
 
@@ -1208,6 +1269,36 @@
 
             </div>
 
+            <div class="risk-control">
+                <div class="label" style="margin-bottom:8px;">
+                    Risk Percentage
+                </div>
+
+                <div class="risk-row">
+                    <input
+                        id="riskPercentInput"
+                        class="risk-input"
+                        type="number"
+                        min="0.01"
+                        max="100"
+                        step="0.1"
+                        value="2"
+                    >
+
+                    <button
+                        id="riskButton"
+                        class="risk-button"
+                        onclick="setRiskPercent()"
+                    >
+                        SET RISK
+                    </button>
+                </div>
+
+                <div class="risk-current">
+                    Current risk: <span id="riskPercentStatus">2.00%</span>
+                </div>
+            </div>
+
             <button
                 id="toggleButton"
                 class="on"
@@ -1400,6 +1491,7 @@ let enabled = false;
 let emergencyStop = false;
 
 let tradeDirection = "both";
+let riskPercent = 2.0;
 
 
 /* ============================================================
@@ -1658,6 +1750,29 @@ function updateUI() {
             : ""
         );
 
+
+    /* RISK PERCENTAGE */
+
+    const riskInput =
+        document.getElementById(
+            "riskPercentInput"
+        );
+
+    const riskStatus =
+        document.getElementById(
+            "riskPercentStatus"
+        );
+
+    if (riskInput && document.activeElement !== riskInput) {
+        riskInput.value =
+            Number(riskPercent).toFixed(2);
+    }
+
+    if (riskStatus) {
+        riskStatus.textContent =
+            Number(riskPercent).toFixed(2) + "%";
+    }
+
 }
 
 
@@ -1676,7 +1791,9 @@ async function loadState() {
 
                 getValue("emergencyStop"),
 
-                getValue("tradeDirection")
+                getValue("tradeDirection"),
+
+                getValue("riskPercent")
 
             ]);
 
@@ -1686,6 +1803,14 @@ async function loadState() {
 
         emergencyStop =
             result[1] === true;
+
+        if (
+            typeof result[3] === "number" &&
+            result[3] > 0 &&
+            result[3] <= 100
+        ) {
+            riskPercent = result[3];
+        }
 
 
         if (
@@ -1816,6 +1941,58 @@ async function setTradeDirection(direction) {
 
         alert(
             "Could not update trade direction."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ============================================================
+   RISK PERCENTAGE
+============================================================ */
+
+async function setRiskPercent() {
+
+    const input =
+        document.getElementById(
+            "riskPercentInput"
+        );
+
+    const value =
+        Number(input.value);
+
+    if (
+        !Number.isFinite(value) ||
+        value <= 0 ||
+        value > 100
+    ) {
+        alert(
+            "Risk must be greater than 0% and no more than 100%."
+        );
+        return;
+    }
+
+    try {
+
+        await setValue(
+            "riskPercent",
+            value
+        );
+
+        riskPercent =
+            value;
+
+        updateUI();
+
+    }
+
+    catch(error) {
+
+        alert(
+            "Could not update risk percentage."
         );
 
         console.error(error);
