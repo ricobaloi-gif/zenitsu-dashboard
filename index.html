@@ -1122,6 +1122,26 @@
             }
         }
 
+
+        .next-lot-card { border: 1px solid rgba(255,210,28,.45); }
+        .next-lot-value { color: var(--yellow); font-size: clamp(28px,6vw,42px); font-weight: 800; margin: 6px 0; }
+        .journal-toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:16px 0; }
+        .journal-month { font-weight:800; color:var(--yellow); text-align:center; }
+        .journal-legend { display:flex; flex-wrap:wrap; gap:12px; color:var(--muted); font-size:12px; margin-bottom:12px; }
+        .journal-calendar { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; }
+        .journal-weekday { text-align:center; color:var(--muted); font-size:10px; padding:8px 0; }
+        .journal-day { min-height:78px; border:1px solid #252525; background:#0b0b0b; border-radius:8px; padding:6px 4px; color:#fff; text-align:left; cursor:pointer; overflow:hidden; }
+        .journal-day.empty { visibility:hidden; }
+        .journal-day.profit { border-color:rgba(53,229,138,.55); background:rgba(53,229,138,.10); }
+        .journal-day.loss { border-color:rgba(255,69,69,.55); background:rgba(255,69,69,.10); }
+        .journal-day.selected { outline:2px solid var(--yellow); }
+        .journal-day .day-num { font-size:12px; font-weight:800; }
+        .journal-day .day-count { display:block; font-size:10px; color:#ddd; margin-top:6px; }
+        .journal-day .day-pl { display:block; font-size:10px; font-weight:700; margin-top:3px; overflow-wrap:anywhere; }
+        .journal-day-details { margin-top:16px; padding:14px; background:#0b0b0b; border:1px solid #292929; border-radius:10px; overflow-wrap:anywhere; }
+        .journal-trade { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid #222; font-size:12px; }
+        @media(max-width:480px) { body{padding:8px} .nav{gap:4px} .nav-button{padding:10px 6px;font-size:10px} .journal-day{min-height:68px;padding:5px 3px} .journal-day .day-pl{font-size:9px} }
+
     </style>
 
 </head>
@@ -1178,13 +1198,9 @@
                 ⚡ CONTROL
             </button>
 
-            <button
-                id="statsNav"
-                class="nav-button"
-                onclick="showPage('stats')"
-            >
-                ◈ STATS
-            </button>
+            <button id="statsNav" class="nav-button" onclick="showPage('stats')">◈ STATS</button>
+            <button id="journalNav" class="nav-button" onclick="showPage('journal')">▦ JOURNAL</button>
+            <button id="moneyNav" class="nav-button" onclick="showPage('money')">＄ CASHFLOW</button>
         </div>
 
         <!-- =================================================
@@ -1237,6 +1253,11 @@
                     >
                         OFF
                     </span>
+                </div>
+
+                <div class="status-row">
+                    <span class="label">Loss-triggered x10</span>
+                    <span id="x10Status" class="value trading-off">OFF</span>
                 </div>
 
             </div>
@@ -1329,12 +1350,27 @@
                 </div>
             </div>
 
+            <div class="risk-control next-lot-card">
+                <div class="label" style="margin-bottom:8px;">NEXT TRADE LOT PREVIEW</div>
+                <div id="nextLotValue" class="next-lot-value">Waiting for MT4…</div>
+                <div id="nextLotDetails" class="risk-current">Preview is supplied by the EA using its live calculation.</div>
+                <div id="nextLotBoost" class="risk-current">Recovery multiplier: unknown</div>
+            </div>
+
             <button
                 id="toggleButton"
                 class="on"
                 onclick="toggleTrading()"
             >
                 TURN TRADING ON
+            </button>
+
+            <button
+                id="x10ToggleButton"
+                class="direction-button"
+                onclick="toggleX10()"
+            >
+                ENABLE LOSS x10
             </button>
 
             <button
@@ -1492,6 +1528,26 @@
 
         </div>
 
+        <div id="journalPage" class="page stats-page">
+            <div class="stats-heading"><div class="stats-title">TRADING JOURNAL</div><div class="stats-subtitle">Daily trade count, net P/L and win rate</div></div>
+            <div class="journal-toolbar"><button class="stats-filter-button" onclick="changeJournalMonth(-1)">‹ PREVIOUS</button><div id="journalMonthLabel" class="journal-month">—</div><button class="stats-filter-button" onclick="changeJournalMonth(1)">NEXT ›</button></div>
+            <div class="journal-legend"><span>🟩 Profitable day</span><span>🟥 Losing day</span><span>⬛ No trades</span></div>
+            <div id="journalCalendar" class="journal-calendar"></div>
+            <div id="journalDayDetails" class="journal-day-details">Select a day to see its trades.</div>
+            <div id="journalStatus" class="stats-status">Loading journal…</div>
+        </div>
+
+        <div id="moneyPage" class="page stats-page">
+            <div class="stats-heading"><div class="stats-title">ACCOUNT CASHFLOW</div><div class="stats-subtitle">Deposits and withdrawals from MT4 account history</div></div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-label">Total Deposits</div><div id="depositTotal" class="stat-value">—</div></div>
+                <div class="stat-card"><div class="stat-label">Total Withdrawals</div><div id="withdrawTotal" class="stat-value">—</div></div>
+            </div>
+            <div class="trade-history"><div class="section-title">Deposits</div><div class="trade-table-wrap"><table class="trade-table"><thead><tr><th>DATE</th><th>REFERENCE</th><th>AMOUNT</th></tr></thead><tbody id="depositTableBody"><tr><td colspan="3">Loading…</td></tr></tbody></table></div></div>
+            <div class="trade-history"><div class="section-title">Withdrawals</div><div class="trade-table-wrap"><table class="trade-table"><thead><tr><th>DATE</th><th>REFERENCE</th><th>AMOUNT</th></tr></thead><tbody id="withdrawTableBody"><tr><td colspan="3">Loading…</td></tr></tbody></table></div></div>
+            <div id="moneyStatus" class="stats-status">Waiting for account transaction history…</div>
+        </div>
+
         <div class="footer">
 
             <span>ZENITSU</span>
@@ -1523,6 +1579,7 @@ let emergencyStop = false;
 let tradeDirection = "both";
 let riskPercent = 2.0;
 let baseLot = 0.10;
+let x10Enabled = false;
 
 
 /* ============================================================
@@ -1591,49 +1648,14 @@ async function setValue(field, value) {
 ============================================================ */
 
 function showPage(page) {
-
-    const controlPage =
-        document.getElementById("controlPage");
-
-    const statsPage =
-        document.getElementById("statsPage");
-
-    const controlNav =
-        document.getElementById("controlNav");
-
-    const statsNav =
-        document.getElementById("statsNav");
-
-    const pageSubtitle =
-        document.getElementById("pageSubtitle");
-
-
-    if (page === "stats") {
-
-        controlPage.classList.remove("active");
-        statsPage.classList.add("active");
-
-        controlNav.classList.remove("active");
-        statsNav.classList.add("active");
-
-        pageSubtitle.textContent =
-            "Performance Analytics";
-
-        loadStats();
-
-    } else {
-
-        statsPage.classList.remove("active");
-        controlPage.classList.add("active");
-
-        statsNav.classList.remove("active");
-        controlNav.classList.add("active");
-
-        pageSubtitle.textContent =
-            "Trading Control";
-
-    }
-
+    const pages = {control:"controlPage", stats:"statsPage", journal:"journalPage", money:"moneyPage"};
+    const navs = {control:"controlNav", stats:"statsNav", journal:"journalNav", money:"moneyNav"};
+    Object.entries(pages).forEach(([key,id]) => document.getElementById(id)?.classList.toggle("active", key===page));
+    Object.entries(navs).forEach(([key,id]) => document.getElementById(id)?.classList.toggle("active", key===page));
+    document.getElementById("pageSubtitle").textContent = ({control:"Trading Control",stats:"Performance Analytics",journal:"Trading Journal",money:"Account Cashflow"})[page] || "Trading Control";
+    if(page === "stats") loadStats();
+    if(page === "journal") loadJournal();
+    if(page === "money") loadCashflow();
 }
 
 
@@ -1657,6 +1679,9 @@ function updateUI() {
         document.getElementById(
             "emergencyStatus"
         );
+
+    const x10Status = document.getElementById("x10Status");
+    const x10ToggleButton = document.getElementById("x10ToggleButton");
 
     const directionStatus =
         document.getElementById(
@@ -1736,6 +1761,12 @@ function updateUI() {
 
     }
 
+
+    /* LOSS-TRIGGERED x10 */
+    x10Status.textContent = x10Enabled ? "ON" : "OFF";
+    x10Status.className = x10Enabled ? "value trading-on" : "value trading-off";
+    x10ToggleButton.textContent = x10Enabled ? "DISABLE LOSS x10" : "ENABLE LOSS x10";
+    x10ToggleButton.className = x10Enabled ? "direction-button active" : "direction-button";
 
     /* TRADE DIRECTION */
 
@@ -1848,7 +1879,9 @@ async function loadState() {
 
                 getValue("riskPercent"),
 
-                getValue("reverseBaseLot")
+                getValue("reverseBaseLot"),
+
+                getValue("x10Enabled").catch(() => false)
 
             ]);
 
@@ -1858,6 +1891,8 @@ async function loadState() {
 
         emergencyStop =
             result[1] === true;
+
+        x10Enabled = result[5] === true;
 
         if (
             typeof result[3] === "number" &&
@@ -1966,6 +2001,22 @@ async function toggleTrading() {
 
     }
 
+}
+
+
+/* ============================================================
+   LOSS-TRIGGERED x10 CONTROL
+============================================================ */
+async function toggleX10() {
+    const newValue = !x10Enabled;
+    try {
+        await setValue("x10Enabled", newValue);
+        x10Enabled = newValue;
+        updateUI();
+    } catch (error) {
+        alert("Could not update the x10 setting.");
+        console.error(error);
+    }
 }
 
 
@@ -3185,7 +3236,8 @@ function renderTradeTable(trades) {
 ============================================================ */
 
 loadState();
-
+loadLotPreview();
+setInterval(loadLotPreview, 5000);
 
 /* ============================================================
    KEEP CONTROL DASHBOARD SYNCHRONIZED
@@ -3222,6 +3274,72 @@ window.addEventListener(
 
     }
 );
+
+
+
+/* NEXT LOT PREVIEW + JOURNAL + ACCOUNT CASHFLOW */
+let journalMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let journalTrades = [];
+let journalSelectedDay = "";
+function moneyFmt(n) { const v=Number(n||0); return (v<0?"−":"") + Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function safeDate(ts) { const n=Number(ts); if(!Number.isFinite(n)||n<=0)return null; const d=new Date(n<1e12?n*1000:n); return isNaN(d)?null:d; }
+function dateKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function esc(s) { return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+async function loadLotPreview() {
+  const value=document.getElementById("nextLotValue"), details=document.getElementById("nextLotDetails"), boost=document.getElementById("nextLotBoost");
+  try {
+    const p=await getValue("lotPreview");
+    if(!p || typeof p.nextLot !== "number") { value.textContent="Waiting for MT4…"; details.textContent="Attach the updated EA and allow Firebase WebRequest access to publish the live preview."; boost.textContent="No live preview received"; return; }
+    value.textContent=Number(p.nextLot).toFixed(2)+" lots";
+    details.textContent=`${p.symbol||"Symbol"} • Balance: ${moneyFmt(p.balance)} ${esc(p.currency||"")} • Risk: ${Number(p.riskPercent||0).toFixed(2)}% • Base lot: ${Number(p.baseLot||0).toFixed(2)} • Calculated lot: ${Number(p.originalLot||0).toFixed(2)} • Reverse lot: ${Number(p.reverseLot||0).toFixed(2)}`;
+    boost.textContent=`Recovery multiplier: ${p.boostActive ? "×10 ARMED" : "×1 NORMAL"} • Updated: ${safeDate(p.updatedAt)?.toLocaleString()||"unknown"}`;
+    boost.style.color=p.boostActive?"var(--red)":"var(--green)";
+  } catch(e) { value.textContent="Preview unavailable"; details.textContent="Could not read /lotPreview from Firebase."; }
+}
+async function getTradeRows() {
+  const raw=await getValue("trades");
+  const rows=Array.isArray(raw)?raw.filter(Boolean):Object.entries(raw||{}).map(([id,t])=>({...t,id}));
+  return rows.map(t=>{ const d=safeDate(t.closeTime||t.time||t.timestamp||t.date); return {...t,_d:d,_key:d?dateKey(d):"",_pl:Number(t.profit??t.netProfit??0)}; }).filter(t=>t._d).sort((a,b)=>a._d-b._d);
+}
+async function loadJournal() {
+  const status=document.getElementById("journalStatus"); status.textContent="Loading journal…";
+  try { journalTrades=await getTradeRows(); renderJournal(); status.textContent=`Loaded ${journalTrades.length} closed trade record(s). Daily win rate = winning trades ÷ closed trades.`; }
+  catch(e) { status.textContent="Could not load journal trade history. Check Firebase access."; }
+}
+function changeJournalMonth(delta) { journalMonth=new Date(journalMonth.getFullYear(),journalMonth.getMonth()+delta,1); renderJournal(); }
+function renderJournal() {
+  const cal=document.getElementById("journalCalendar"); if(!cal)return;
+  document.getElementById("journalMonthLabel").textContent=journalMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});
+  const weekdays=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  cal.innerHTML=weekdays.map(d=>`<div class="journal-weekday">${d}</div>`).join("");
+  const first=new Date(journalMonth.getFullYear(),journalMonth.getMonth(),1).getDay();
+  const days=new Date(journalMonth.getFullYear(),journalMonth.getMonth()+1,0).getDate();
+  for(let i=0;i<first;i++) cal.insertAdjacentHTML("beforeend",'<div class="journal-day empty"></div>');
+  for(let day=1;day<=days;day++) {
+    const d=new Date(journalMonth.getFullYear(),journalMonth.getMonth(),day), key=dateKey(d), ts=journalTrades.filter(t=>t._key===key), pl=ts.reduce((a,t)=>a+t._pl,0), wins=ts.filter(t=>t._pl>0).length, wr=ts.length?wins/ts.length*100:null;
+    const cls=ts.length?(pl>=0?"profit":"loss"):"", selected=journalSelectedDay===key?" selected":"";
+    cal.insertAdjacentHTML("beforeend",`<button class="journal-day ${cls}${selected}" onclick="selectJournalDay('${key}')"><span class="day-num">${day}</span><span class="day-count">${ts.length?ts.length+" trades":"—"}</span><span class="day-pl" style="color:${pl>0?'var(--green)':pl<0?'var(--red)':'#aaa'}">${ts.length?(pl>0?'+':'')+moneyFmt(pl):''}</span>${ts.length?`<span class="day-count">${wr.toFixed(0)}% wins</span>`:''}</button>`);
+  }
+  if(!journalSelectedDay) journalSelectedDay=dateKey(new Date());
+  renderJournalDay(journalSelectedDay);
+}
+function selectJournalDay(key) { journalSelectedDay=key; renderJournal(); }
+function renderJournalDay(key) {
+  const box=document.getElementById("journalDayDetails"), ts=journalTrades.filter(t=>t._key===key), pl=ts.reduce((a,t)=>a+t._pl,0), wins=ts.filter(t=>t._pl>0).length, wr=ts.length?wins/ts.length*100:0;
+  box.innerHTML=`<h3>${new Date(key+"T12:00:00").toLocaleDateString(undefined,{weekday:"long",year:"numeric",month:"long",day:"numeric"})}</h3><p style="margin:8px 0;color:#aaa">${ts.length} closed trades • Net P/L: <strong style="color:${pl>=0?'var(--green)':'var(--red)'}">${moneyFmt(pl)}</strong> • Win rate: ${ts.length?wr.toFixed(1)+"%":"—"}</p>`+(ts.length?ts.map(t=>`<div class="journal-trade"><span>${esc(t.symbol||"—")} ${esc(t.type||t.tradeType||"")}<br><small>${t._d.toLocaleTimeString()}</small><br><small>${Number(t.lot||t.lots||0).toFixed(2)} lots</small></span><strong style="color:${t._pl>=0?'var(--green)':'var(--red)'}">${t._pl>0?'+':''}${moneyFmt(t._pl)}</strong></div>`).join(""):'<p style="margin-top:12px;color:#777">No closed trades recorded for this day.</p>');
+}
+async function loadCashflow() {
+  const status=document.getElementById("moneyStatus"); status.textContent="Loading account transactions…";
+  try {
+    const raw=await getValue("transactions"), rows=(Array.isArray(raw)?raw.filter(Boolean):Object.entries(raw||{}).map(([id,t])=>({...t,id}))).filter(t=>/deposit|withdraw/i.test(String(t.type||""))).map(t=>({...t,_d:safeDate(t.time||t.timestamp||t.date),_amount:Number(t.amount||0)})).sort((a,b)=>(b._d?.getTime()||0)-(a._d?.getTime()||0));
+    const deps=rows.filter(t=>String(t.type).toLowerCase()==="deposit"), wds=rows.filter(t=>String(t.type).toLowerCase()==="withdrawal");
+    document.getElementById("depositTotal").textContent=moneyFmt(deps.reduce((a,t)=>a+Math.abs(t._amount),0));
+    document.getElementById("withdrawTotal").textContent=moneyFmt(wds.reduce((a,t)=>a+Math.abs(t._amount),0));
+    const render=(arr)=>arr.length?arr.map(t=>`<tr><td>${t._d?esc(t._d.toLocaleString()):"—"}</td><td>${esc(t.reference||t.ticket||t.id||"—")}</td><td class="${t._amount<0?'loss':'win'}">${moneyFmt(Math.abs(t._amount))}</td></tr>`).join(""):'<tr><td colspan="3" style="text-align:center;color:#777">No records found</td></tr>';
+    document.getElementById("depositTableBody").innerHTML=render(deps); document.getElementById("withdrawTableBody").innerHTML=render(wds);
+    status.textContent=rows.length?`${rows.length} account transaction(s) loaded.`:"No transaction records found yet. The updated EA must scan MT4 account history and publish deposits/withdrawals.";
+  } catch(e) { status.textContent="Could not load transactions from Firebase."; }
+}
 
 </script>
 
